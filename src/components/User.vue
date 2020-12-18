@@ -61,7 +61,7 @@
               password: this.passwordField
             }
             // axios.post("http://127.0.0.1:8000/user/auth/", data )
-            axios.post("https://mis-gastos-mintic.herokuapp.com", data )
+            axios.post("https://mis-gastos-mintic.herokuapp.com/user/auth", data )
                 .then((result) => {
                     // self.balance = result.data.balance
                     console.log(result);
