@@ -51,8 +51,8 @@ export default {
         console.log('Se disparo el created de UserBalance');
 
         let self = this
-        // axios.get("http://127.0.0.1:8000/user/expenses/" + this.username)
-        axios.get("https://mis-gastos-mintic.herokuapp.com/user/expenses/" + this.username)
+        axios.get("http://127.0.0.1:8000/user/expenses/" + this.username)
+        // axios.get("https://mis-gastos-mintic.herokuapp.com/user/expenses/" + this.username)
             .then((result) => {
                 // self.balance = result.data.balance
                 console.log(result);
@@ -61,7 +61,7 @@ export default {
                 //alert(`Tienes ${count} gastos`);
                 self.expenses = result.data.data;
                 // self.balance = 3000;
-                console.log(self.expenses[1].title);
+                
                 let total = 0;
                 self.expenses.forEach(e => total += parseFloat( e.value ));
                 self.totalExpenses = total;

@@ -64,8 +64,8 @@
             }
 
 
-            // axios.post("http://127.0.0.1:8000/user/add_expense/" + this.username, data )
-            axios.post("https://mis-gastos-mintic.herokuapp.com/user/add_expense/" + this.username, data )
+            axios.post("http://127.0.0.1:8000/user/add_expense/" + this.username, data )
+            // axios.post("https://mis-gastos-mintic.herokuapp.com/user/add_expense/" + this.username, data )
                 .then(function(result){
                     
                     
