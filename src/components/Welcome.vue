@@ -1,7 +1,8 @@
 <template>
     <div id="Welcome">
 
-        <h2>Bienvenido {{username}}</h2>
+        <h2>Bienvenido <span> {{username}} </span></h2>
+        <br>
         <h3>Con nuestra app tu puedes controlar los gastos de cada mes</h3>
     
     </div>

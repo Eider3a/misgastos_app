@@ -1,7 +1,32 @@
 <template>
     <div id="UserBalance">
-        <h2>{{username}}</h2>
-        <h2>Los gastos de este mes son: <span>  {{balance}} COP </span> </h2>
+        <h2>Bienvenido <span> {{username}} </span>, tienes {{count}} gastos este mes.</h2>
+        <h2>Por un valor de: <span>  {{totalExpenses}} COP </span> </h2>
+
+        <div class="scrollit">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Titulo</th>
+                <th>Descripción</th>
+                <th>Valor</th>
+                <th>T. gasto</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(expense,i) in expenses" :key="i">
+                
+                <td>{{ expense.title }}</td> 
+                <td>{{ expense.description }}</td> 
+                <td>{{ expense.value }}</td> 
+                <td>{{ expense.payment_type }}</td> 
+                
+              </tr>
+            </tbody>
+          </table>
+        
+        </div>
+        
     </div>
 </template>
 
@@ -12,7 +37,10 @@ export default {
     data: function (){
         return {
             username: "",
-            balance: 0
+            balance: 0,
+            expenses: [],
+            count: 0,
+            totalExpenses : 0,
         }
     },
     created: function(){
@@ -28,7 +56,16 @@ export default {
             .then((result) => {
                 // self.balance = result.data.balance
                 console.log(result);
-                self.balance = result.data.expenses
+                let countExpenses = result.data.count;
+                self.count = countExpenses;
+                //alert(`Tienes ${count} gastos`);
+                self.expenses = result.data.data;
+                // self.balance = 3000;
+                console.log(self.expenses[1].title);
+                let total = 0;
+                self.expenses.forEach(e => total += parseFloat( e.value ));
+                self.totalExpenses = total;
+                
             })
             .catch((error) => {
                 console.log(error);
@@ -41,6 +78,10 @@ export default {
 
 
 <style>
+    .scrollit {
+        overflow:scroll;
+        height:500px;
+    }
     #UserBalance{
         width: 100%;
         height: 100%;

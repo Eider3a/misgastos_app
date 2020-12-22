@@ -1,23 +1,22 @@
 <template>
-    <div id="User">
+    <div id="Expense">
         <!-- <h2>Hola  <span> {{username}}, </span>  ¡Bienvenido!</h2>
         <br> -->
         <div class="main">
-          <p class="sign" align="center">Login</p>
-          <ul>
-            <li>Usuarios en la DB ficticia:</li>
-            <li>username: camilo24, password: root</li>
-            <li>username: andres18, password: root</li>
-          </ul>
+          <p class="sign" align="center">Agregar nuevo gasto</p>
+          
           <div class="form1">
 
-            <input class="un " v-model="usernameField" id="username" type="text" align="center" placeholder="nombre de usuario">
-            <input class="pass" v-model="passwordField" id="password" type="password" align="center" placeholder="contraseña">
-            
-            <!-- <a class="submit" align="center">Sign in</a> -->
-            <!-- <input type="submit" class="submit" align="center" value="Sign in"> -->
-            <button v-on:click="login"  class="submit" align="center">Sign in</button>
-            <p class="forgot" align="center"><a href="#">Forgot Password?</p>
+            <input class="un " v-model="titleField" ref="titleFieldRef" id="title" type="text" align="center" placeholder="Titulo" required>
+            <input class="pass" v-model="valueField" id="value" type="number" align="center" placeholder="Valor" required>
+            <input class="un" v-model="descriptionField" id="description" type="text" align="center" placeholder="Descripción" required>
+            <select class="un" id="payment" v-model="paymentTypeField" required>
+              <option value="Efectivo" selected>Efectivo</option>
+              <option value="Tarjeta de credito">Tarjeta de credito</option>
+              <option value="Prestamo">Prestamo</option>
+            </select>
+                      
+            <button v-on:click="addExpense"  class="submit" align="center">Añadir gasto</button>
             
           </div> 
 
@@ -30,8 +29,8 @@
 <script>
     import axios from 'axios';
 
-    let usernameField = document.getElementById('username');
-    let passwordField = document.getElementById('password');
+    let usernameField = document.getElementById('title');
+    // let passwordField = document.getElementById('password');
 
     export default {
         name: "User",
@@ -41,54 +40,55 @@
             }
         },
         methods: {
-          login: function(){
+          addExpense: function(){
 
-            // this.username = this.$route.params.username
-            this.username = this.usernameField;
+            // El usuario viene en los parametros cuando se hizo el cambio de ruta
+            this.username = this.$route.params.username;
+            
 
-            console.log('Oprimio el boton de login');
+            console.log(this.titleField, this.valueField, this.descriptionField, this.paymentTypeField);
 
-            console.log(!this.usernameField, !this.passwordField);
-
-            if(!this.usernameField || !this.passwordField){
-              return alert('Debes llenar los campos de usuario y contraseña');
+            if(!this.titleField || !this.valueField || !this.descriptionField || !this.paymentTypeField){
+              return alert('Debes llenar todos los campos');
             }
 
             
             let self = this;
+
             let data = {
-              username: this.usernameField,
-              password: this.passwordField
+              username: this.username,
+              title: this.titleField,
+              value: this.valueField,
+              description: this.descriptionField,
+              payment_type: this.paymentTypeField,
             }
-            // axios.post("http://127.0.0.1:8000/user/auth/", data )
-            axios.post("https://mis-gastos-mintic.herokuapp.com/user/auth", data )
-                .then((result) => {
-                    // self.balance = result.data.balance
+
+
+            // axios.post("http://127.0.0.1:8000/user/add_expense/" + this.username, data )
+            axios.post("https://mis-gastos-mintic.herokuapp.com/user/add_expense/" this.username, data )
+                .then(function(result){
+                    
+                    
                     console.log(result);
+                    // this.$refs['titleFieldRef'].value = "";
 
-                    self.balance = result.data.Autenticado
-                    self.auth = result.data.Autenticado
+                    // Le indico que el gasto se agrego correctamente
+                    alert('El nuevo gasto se agrego correctamente');
 
-                    if (self.auth) {// Logeado correctamente
-                      alert('Usuario logeado correctamente');
+                    //Guardo en el localStorage el usuario que se logueo.
+                    //localStorage.setItem('current_username', this.username);
 
-                      //Guardo en el localStorage el usuario que se logueo.
-                      localStorage.setItem('current_username', this.username);
+                    // if(this.$route.name != "welcome"){
+                    //   console.log('entro al cambio de ruta');
+                    //   let username = localStorage.getItem("current_username")
+                    //   this.$router.push({name: "welcome", params:{ username: username }})
+                    // }
 
-                      if(this.$route.name != "welcome"){
-                        console.log('entro al cambio de ruta');
-                        let username = localStorage.getItem("current_username")
-                        this.$router.push({name: "welcome", params:{ username: username }})
-                      }
-
-                    } else {
-                      alert('Error: las credenciales son incorrectas');
-                    }
                 })
                 .catch((error) => {
                     console.log(error);
                     // alert("ERROR Servidor");
-                    alert('Error: las credenciales son incorrectas');
+                    alert('Error: no se pudo agregar el nuevo gasto');
                 });
 
             // console.log(this.$router );
@@ -96,11 +96,13 @@
           },
         },
         created: function(){
-
+          
             // this.username = this.$route.params.username
         }
     }
 </script>
+
+    
 
 
 <style>

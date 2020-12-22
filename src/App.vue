@@ -7,7 +7,8 @@
         <!-- <button v-if="is_auth" v-on:click="init"  type="button" class="btn btn-primary"  >Login</button> -->
         <!-- <button v-if="is_auth" v-on:click="loginSuccessful"  type="button" class="btn btn-info"  >Welcome</button> -->
         <button v-on:click="getBalance" v-if="is_auth" type="button" class="btn btn-danger" >Gastos</button>
-        <button v-on:click="logout" v-if="is_auth" type="button" class="btn btn-warning" >CerrarSesión</button>
+        <button v-on:click="addNewExpense" v-if="is_auth" type="button" class="btn btn-success" >Nuevo gasto</button>
+        <button v-on:click="logout" v-if="is_auth" type="button" class="btn btn-warning" >Cerrar Sesión</button>
       </nav>
     </div>
     
@@ -51,7 +52,7 @@ export default {
         if (!username) {
           return alert('Debes loguearte para ver el total de tus gastos');
         }
-        this.$router.push({name: "user_balance", params:{ username: username }})
+        this.$router.push({name: "user_balance", params:{ username: username }});
       }
     },
     loginSuccessful: function(){
@@ -68,18 +69,29 @@ export default {
         this.$router.push({name: "user"})
       }
     },
+    addNewExpense: function(){
+      console.log(this.$router );
+      if(this.$route.name != "new_expense"){
+
+        // Saco del localstorage el usuario actual.
+        let username = localStorage.getItem("current_username")
+        if (!username) {
+          return alert('Debes loguearte para poder acceder a esta funcion');
+        }
+        this.$router.push({name: "new_expense", params:{ username: username }});
+      }
+    }
   },
 
+  // Esta funcion se ejecuta cuando se llama este archivo.
   beforeCreate:function() {
     // localStorage.setItem('current_username','camilo24')
     // localStorage.setItem('isAuth',true)
     localStorage.setItem('current_username','')
     localStorage.setItem('isAuth',false)
-
-    // this.$router.push({name: "user", params:{ username: 'camilo24' }})  
+ 
     this.$router.push({name: "user"})  
-    // console.log('Se llamo el beforeCreate');
-    // console.log(this.$router);
+    
   }
 }
 </script>
